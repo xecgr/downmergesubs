@@ -145,9 +145,7 @@ El Gran Maestre Pycelle ha convocado
 una reunión del consejo.
 Le Grand Mestre Pycelle a convoqué
 le conseil.
-
-6
-xecgr@carteras:~/dev/github/downmergesubs/Game of thrones/sample_dir$ 
+xecgr@carteras:~/sample_dir$ 
 ```
 
 #Installation
