@@ -96,11 +96,67 @@ The honor of your presence is requested.
 Se requiere el honor de su presencia.
 ```
 
+A custom invocation, would look like this:
+```
+xecgr@carteras:~/sample_dir$ downmergesubs -n "Game of Thrones" --langs es fr
+Getting season and episode: 1,1
+Searching subs for: Game of Thrones S01E01 - Winter Is Coming.avi
+Getting season and episode: 1,3
+Searching subs for: Game of Thrones S01E03 - Lord Snow.avi
+Getting season and episode: 1,2
+Searching subs for: Game of Thrones S01E02 - The Kingsroad.avi
+xecgr@carteras:~/dev/github/downmergesubs/Game of thrones/sample_dir$ ls -l
+S01E01 - Winter Is Coming.avi
+S01E01 - Winter Is Coming.srt
+S01E02 - The Kingsroad.avi
+S01E02 - The Kingsroad.srt
+S01E03 - Lord Snow.avi
+S01E03 - Lord Snow.srt
+```
+
+And the result:
+```
+xecgr@carteras:~/sample_dir$ head -n 30 S01E03\ -\ Lord\ Snow.srt 
+1
+00:00:00,501 --> 00:00:02,001
+<font color="#ffff00" size=14>www.tvsubtitles.net</font>
+
+2
+00:00:06,001 --> 00:00:12,075
+Anuncie su producto o marca aquí
+contáctenos www.OpenSubtitles.org hoy
+Annoncez votre produit ou votre marque ici. Contactez www.OpenSubtitles.org aujourd&#039;hui !
+
+3
+00:01:35,927 --> 00:01:46,001
+www.SUBTITULOS.es
+-DIFUNDE LA PALABRA-
+Sync by honeybunny
+Traduction: MC07
+
+4
+00:02:13,538 --> 00:02:14,854
+Bienvenido, Lord Stark.
+Bienvenue, Lord Starck.
+
+5
+00:02:14,974 --> 00:02:18,274
+El Gran Maestre Pycelle ha convocado
+una reunión del consejo.
+Le Grand Mestre Pycelle a convoqué
+le conseil.
+
+6
+xecgr@carteras:~/dev/github/downmergesubs/Game of thrones/sample_dir$ 
+```
+
 #Installation
 `pip install --upgrade git+https://github.com/xecgr/downmergesubs.git`
 
 In near future it will be available via `pip install downmergesubs`
 
-#Possible issue
-Maybe, downloaded subtitles are note synchronized between them. I have not been able to reproduce it, but if you do, open an issue with concrete examples and maybe we can fix it
+#Possible issues
+- Maybe, downloaded subtitles are note synchronized between them. I have not been able to reproduce it, but if you do, open an issue with concrete examples and maybe we can fix it
+
+- During OpenSubtitles downtimes, script will slow down its execution, don't worry it ends up working
 

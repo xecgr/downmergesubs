@@ -67,12 +67,10 @@ def get_season_episode(name, custom_regexs = []):
                 break
     return season,episode
 
-def get_queries(path='',video_extensions=DEFAULT_VIDEO_EXTS):
+def get_queries(video_extensions=DEFAULT_VIDEO_EXTS):
     queries   = []
-    show_name = path
-    if not path:
-        path = os.getcwd()
-        show_name = os.path.split(path)[-1]
+    path      = os.getcwd()
+    show_name = os.path.split(path)[-1]
     path = os.path.join(path,'*{}')
     for ve in video_extensions:
         if not ve.startswith("."):
@@ -82,18 +80,18 @@ def get_queries(path='',video_extensions=DEFAULT_VIDEO_EXTS):
     return show_name,queries
 
 def downmergesubs(**kwargs):
-    video_extensions  = kwargs.get('video_extensions',DEFAULT_VIDEO_EXTS)
-    subs_languages    = kwargs.get('subs_languages',DEFAULT_LANGS)
-    regexs            = kwargs.get('regexs',[])
-    show_name         = kwargs.get('show_name','').strip()
+    video_extensions   = kwargs.get('video_extensions',DEFAULT_VIDEO_EXTS)
+    subs_languages     = kwargs.get('subs_languages',DEFAULT_LANGS)
+    regexs             = kwargs.get('regexs',[])
+    _show_name,queries = get_queries(video_extensions=video_extensions)
+    show_name          = kwargs.get('show_name',_show_name).strip()
     
-    show_name,queries = get_queries(path=show_name,video_extensions=video_extensions)
-    xmlrpc            = ServerProxy(OPENSUBTITLES_SERVER,allow_none=True)
-    username          = ''
-    password          = ''
+    xmlrpc             = ServerProxy(OPENSUBTITLES_SERVER,allow_none=True)
+    username           = ''
+    password           = ''
     
-    data              = xmlrpc.LogIn(username, password,subs_languages[0], USER_AGENT)
-    token             = data.get('token','')
+    data               = xmlrpc.LogIn(username, password,subs_languages[0], USER_AGENT)
+    token              = data.get('token','')
     if not token:
         print "Invalid OPENSUBTITLES credentials"
         sys.exit()
