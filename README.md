@@ -105,7 +105,7 @@ Getting season and episode: 1,3
 Searching subs for: Game of Thrones S01E03 - Lord Snow.avi
 Getting season and episode: 1,2
 Searching subs for: Game of Thrones S01E02 - The Kingsroad.avi
-xecgr@carteras:~/dev/github/downmergesubs/Game of thrones/sample_dir$ ls -l
+xecgr@carteras:~/sample_dir$ ls -l
 S01E01 - Winter Is Coming.avi
 S01E01 - Winter Is Coming.srt
 S01E02 - The Kingsroad.avi
