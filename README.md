@@ -98,7 +98,8 @@ Se requiere el honor de su presencia.
 
 #Installation
 `pip install --upgrade git+https://github.com/xecgr/downmergesubs.git`
-In near future it will be available via `pip install`
+
+In near future it will be available via `pip install downmergesubs`
 
 #Possible issue
 Maybe, downloaded subtitles are note synchronized between them. I have not been able to reproduce it, but if you do, open an issue with concrete examples and maybe we can fix it
