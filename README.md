@@ -37,9 +37,9 @@ S01E03 - Lord Snow.avi
 
 If you have all files wrapped in a folder with show's name, you can omit the `-n` parameter, because folder's name is set as the show name
 
-In order to extract season and episode, the scripts have defined a list of regex to extract them. If your episodes are coded in the standard way, you can also omit the `-regexs` parameter
+In order to extract season and episode, the script's defined a list of regex to extract them. If your episodes are coded in the standard way, you can also omit the `-regexs` parameter
 
-You can define also the desired languages you want to download and merge. Default are EN and ES, but you can download as many as you want and need.
+You can also define the desired languages you want to download and merge. Default are EN and ES, but you can download as many as you want and need.
 
 And finaly there's a list of video file extensions that allow script to discover the episodes in current dir. Default list values are: `['.avi','.mkv','.mp4']`. If you need to specify another extension, use `-exts` parameter.
 
