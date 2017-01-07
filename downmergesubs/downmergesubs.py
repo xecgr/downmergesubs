@@ -20,7 +20,7 @@ __author__ = 'xecgr'
 __version__ = '1.0'
 __release_date__ = "01/09/2016"
 
-import os, re, sys
+import os, re, sys, difflib
 import argparse
 from xmlrpclib import ServerProxy
 import gzip,urllib2,StringIO,glob
@@ -96,24 +96,29 @@ def downmergesubs(**kwargs):
         print "Invalid OPENSUBTITLES credentials"
         sys.exit()
     
-    for query in queries:
-        query = os.path.split(query)[-1]
-        season,episode = get_season_episode(query, custom_regexs=regexs)
+    for filename in queries:
+        filename = os.path.split(filename)[-1]
+        season,episode = get_season_episode(filename, custom_regexs=regexs)
         print u"Getting season and episode: {},{}".format(season,episode)
-        _query = query
-        if not show_name or show_name.lower() not in query.lower():
-            _query = show_name + " " + query
+        _query = filename
+        if not show_name or show_name.lower() not in filename.lower():
+            _query = show_name + " " + filename
         params = [{'sublanguageid': subs_languages[0], 'query': _query}]
         #(array('sublanguageid' => $sublanguageid, 'moviehash' => $moviehash, 'moviebytesize' => $moviesize, imdbid => $imdbid, query => 'movie name', "season" => 'season number', "episode" => 'episode number', 'tag' => tag
         print u"Searching subs for: {}".format(_query)
         data = xmlrpc.SearchSubtitles(token, params)
         lang_subinfo    = {}
-        #sorted by download count
-        for d in data['data']:
+        lang_ratio_data = {}
+        #compute similarity between video file and sub's video traduction
+        for idx,d in enumerate(data['data']):
             lang = d.get('ISO639','')
-            if lang in subs_languages and d.get('SeriesSeason',0)==season and d.get('SeriesEpisode',0)==episode and not lang_subinfo.get(lang,{}):
-                lang_subinfo[lang]=d
-        
+            if lang in subs_languages and d.get('SeriesSeason',0)==season and d.get('SeriesEpisode',0)==episode:
+                lang_ratio_data.setdefault(lang,{})[difflib.SequenceMatcher(None, filename, d['MovieReleaseName']).ratio()] = d
+        #get data for those subtitles that are more similar
+        for lang in subs_languages:
+            guess_subtitle = max(lang_ratio_data[lang].keys())
+            lang_subinfo[lang] = lang_ratio_data[lang][guess_subtitle]
+            
         srt_encoding = {}
         for l,d in lang_subinfo.iteritems():
             response = urllib2.urlopen(d['SubDownloadLink'])
@@ -130,7 +135,7 @@ def downmergesubs(**kwargs):
             srt_encoding[outFilePath] = d['SubEncoding']
             with open(outFilePath, 'w') as outfile:
                 outfile.write(decompressedFile.read())
-        out_filepath, out_filepath_ext = os.path.splitext(query)
+        out_filepath, out_filepath_ext = os.path.splitext(filename)
         out_filepath = out_filepath +".srt"
         #prepare args and kwargs depending of srtmerge version
         srt_args = [
