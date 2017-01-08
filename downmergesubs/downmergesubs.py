@@ -85,6 +85,7 @@ def downmergesubs(**kwargs):
     regexs             = kwargs.get('regexs',[])
     _show_name,queries = get_queries(video_extensions=video_extensions)
     show_name          = kwargs.get('show_name',_show_name).strip()
+    keep_partial_subs  = kwargs.get('keep_partial_subs',False)
     
     xmlrpc             = ServerProxy(OPENSUBTITLES_SERVER,allow_none=True)
     username           = ''
@@ -120,6 +121,7 @@ def downmergesubs(**kwargs):
             lang_subinfo[lang] = lang_ratio_data[lang][guess_subtitle]
             
         srt_encoding = {}
+        srt_lang     = {}
         for l,d in lang_subinfo.iteritems():
             response = urllib2.urlopen(d['SubDownloadLink'])
             compressedFile = StringIO.StringIO()
@@ -133,14 +135,14 @@ def downmergesubs(**kwargs):
             decompressedFile = gzip.GzipFile(fileobj=compressedFile, mode='rb')
             outFilePath=d['SubFileName']
             srt_encoding[outFilePath] = d['SubEncoding']
+            srt_lang[outFilePath] = d['ISO639']
             with open(outFilePath, 'w') as outfile:
                 outfile.write(decompressedFile.read())
         out_filepath, out_filepath_ext = os.path.splitext(filename)
-        out_filepath = out_filepath +".srt"
         #prepare args and kwargs depending of srtmerge version
         srt_args = [
             srt_encoding.keys(),
-            out_filepath
+            out_filepath +".srt"
         ]
         if ACCEPT_SRT_ENCODING:
             srt_args[0] = srt_encoding
@@ -154,7 +156,11 @@ def downmergesubs(**kwargs):
             }
         
         srtmerge(*srt_args, **srt_kwargs)
-        for srt in srt_encoding:
-            os.remove(srt)
+        for srt,lang in srt_lang.iteritems():
+            if keep_partial_subs:
+                srt_norm_filename = out_filepath + u"." + lang + u".srt"
+                os.rename(srt,srt_norm_filename)
+            else:
+                os.remove(srt)
         
     xmlrpc.LogOut(token)

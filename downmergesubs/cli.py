@@ -65,6 +65,13 @@ def main():
         default=[],
         help = "custom regex to dectect season and episode from file name"
     )
+    parser.add_argument(
+        '--keep-partial-subs',
+        nargs='+', 
+        type=bool,
+        default=False,
+        help = "keep merged srt files"
+    )
     parser.add_argument("-v", "--verbosity", action="count", default=0)
     parser.add_argument("-n", type=str, help="tv show name [default current directory name]")
     
@@ -72,6 +79,7 @@ def main():
     video_extensions = parser.parse_args().exts
     subs_languages   = parser.parse_args().langs
     regexs           = parser.parse_args().regexs
+    keep_partial_subs= parser.parse_args().keep_partial_subs
     show_name        = parser.parse_args().n or ''
     if '--version' in sys.argv:
         print_version()
@@ -82,6 +90,7 @@ def main():
             video_extensions = video_extensions,
             subs_languages   = subs_languages,
             regexs           = regexs,
+            keep_partial_subs=keep_partial_subs,
             show_name        = show_name
         )
     
