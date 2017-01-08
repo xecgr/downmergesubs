@@ -67,7 +67,6 @@ def main():
     )
     parser.add_argument(
         '--keep-partial-subs',
-        nargs='+', 
         type=bool,
         default=False,
         help = "keep merged srt files"
